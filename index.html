@@ -618,8 +618,11 @@
         let isPlaying = false;
 
         function openInvitation() {
+            // إخفاء شاشة الظرف فوراً بغض النظر عن حالة الصوت
             const screen = document.getElementById('envelope-screen');
             screen.classList.add('opened');
+            
+            // محاولة تشغيل الأغنية بأمان
             music.play().then(() => {
                 isPlaying = true;
                 musicBtn.textContent = '🔊';
@@ -628,3 +631,39 @@
                 musicBtn.textContent = '🔇';
             });
         }
+
+        function toggleMusic() {
+            if (isPlaying) {
+                music.pause();
+                musicBtn.textContent = '🔇';
+                isPlaying = false;
+            } else {
+                music.play().then(() => {
+                    isPlaying = true;
+                    musicBtn.textContent = '🔊';
+                }).catch(e => console.log(e));
+            }
+        }
+
+        const weddingDate = new Date("December 10, 2026 20:00:00").getTime();
+
+        setInterval(function() {
+            const now = new Date().getTime();
+            const distance = weddingDate - now;
+
+            if (distance > 0) {
+                document.getElementById("days").innerText = Math.floor(distance / (1000 * 60 * 60 * 24));
+                document.getElementById("hours").innerText = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                document.getElementById("minutes").innerText = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                document.getElementById("seconds").innerText = Math.floor((distance % (1000 * 60)) / 1000);
+            }
+        }, 1000);
+
+        function submitRSVP(e) {
+            e.preventDefault();
+            document.getElementById('rsvpForm').style.display = 'none';
+            document.getElementById('rsvpSuccess').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
